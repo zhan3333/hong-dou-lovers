@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
+    <script>var user_id = '{{ $user_id or 'undefine' }}'</script>
 </head>
 <body>
     <div id="app">
@@ -77,5 +78,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/chat.js') }}"></script>
 </body>
 </html>

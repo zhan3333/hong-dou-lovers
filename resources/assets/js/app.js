@@ -20,9 +20,3 @@ Vue.component('example', require('./components/Example.vue'));
 const app = new Vue({
     el: '#app'
 });
-
-console.info('echo listen')
-Echo.private('chat')
-    .listen('SendMessage', (e) => {
-        console.log(e)
-    })

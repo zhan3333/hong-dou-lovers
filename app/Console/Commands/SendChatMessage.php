@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Message;
 use App\User;
 use Illuminate\Console\Command;
 
@@ -39,6 +40,12 @@ class SendChatMessage extends Command
     public function handle()
     {
         $user = User::first();
-        event(new \App\Events\SendMessage($user));
+        $message = Message::make([
+            'user_id' => 1,
+            'to' => 2,
+            'type' => 1,
+            'content' => 'hello world'
+        ]);
+        event(new \App\Events\SendMessage($user, $message));
     }
 }

@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
 
 
 use App\Events\SendMessage;
+use App\Models\Message;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,13 @@ class Chat extends Controller
 //            'type' => $type,
 //            'user_id' => $userId,
 //        ]);
-        broadcast(new SendMessage($user));
-        return view('chat.chat');
+        $message = Message::make([
+            'content' => $content,
+            'to' => $to,
+            'type' => $type,
+            'user_id' => $userId,
+        ]);
+        broadcast(new SendMessage($user, $message));
+        return view('chat.chat', ['user_id' => $user->id]);
     }
 }
