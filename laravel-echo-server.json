@@ -1,0 +1,22 @@
+{
+	"authHost": "http://127.0.0.1:1025",
+	"authEndpoint": "/broadcasting/auth",
+	"clients": [
+		{
+			"appId": "6c5c49880ade618f",
+			"key": "9c4307e784032be5cd766887618840ab"
+		}
+	],
+	"database": "redis",
+	"databaseConfig": {
+		"redis": {},
+		"sqlite": {}
+	},
+	"devMode": true,
+	"host": null,
+	"port": "6001",
+	"protocol": "http",
+	"socketio": {},
+	"sslCertPath": "",
+	"sslKeyPath": ""
+}
