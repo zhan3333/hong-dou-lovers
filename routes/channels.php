@@ -12,5 +12,6 @@
 */
 
 Broadcast::channel('chat.{toUserId}', function ($user, $toUserId) {
+    Log::info('channel', [$user, $toUserId]);
     return (int) $user->id === (int) $toUserId;
 });

@@ -11,6 +11,7 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Log;
 
 class SendMessage implements ShouldBroadcast
 {
@@ -41,7 +42,6 @@ class SendMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        \Log::info('队列中执行事件，进行广播', []);
-        return new PrivateChannel('chat'.$this->message->user_id);
+        return new PrivateChannel('chat.' . $this->message->to);
     }
 }

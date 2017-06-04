@@ -29,12 +29,19 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * a simple convenience so we don't have to attach every token manually.
  */
 
-let token = document.head.querySelector('meta[name="csrf-token"]');
-
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+// csrf 认证
+if (Laravel.csrfToken) {
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken
 } else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token')
+}
+
+// api认证
+if (Laravel.userId) {
+    window.axios.defaults.headers.common['Authorization'] = Laravel.apiToken
+    console.log('is login')
+} else {
+    console.log('no login')
 }
 
 /**
@@ -46,7 +53,8 @@ if (token) {
 import Echo from 'laravel-echo'
 
 // window.Pusher = require('pusher-js');
-console.log('connect to : ', window.location.hostname + ':6001')
+console.log('connect to :', window.location.hostname + ':6001')
+console.log('Laravel: ', Laravel)
 window.Echo = new Echo({
     broadcaster: 'socket.io',
     host: window.location.hostname + ':6001'

@@ -33,19 +33,14 @@ class Chat extends Controller
         $user = $request->user();
         $userId = $user->id;
         \Log::info('send message', [$content, $to, $type, $userId]);
-//        Message::insert([
-//            'content' => $message,
-//            'to' => $to,
-//            'type' => $type,
-//            'user_id' => $userId,
-//        ]);
         $message = Message::make([
             'content' => $content,
             'to' => $to,
             'type' => $type,
             'user_id' => $userId,
         ]);
+        $message->save();
         broadcast(new SendMessage($user, $message));
-        return view('chat.chat', ['user_id' => $user->id]);
+        return response()->caps([], 0, 'sucess', []);
     }
 }

@@ -27,6 +27,5 @@ class SendMessageNotification
     public function handle(SendMessage $event)
     {
         //
-        \Log::info('监听事件中', [$event]);
     }
 }
