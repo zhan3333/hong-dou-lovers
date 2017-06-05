@@ -73,13 +73,12 @@
 
         @yield('content')
     </div>
-
     <!-- Scripts -->
     <script>
         let Laravel = {}
         Laravel.csrfToken = "{{ csrf_token() }}"
-        Laravel.apiToken = "{{ Auth::check() ? 'Bearer '.Auth::user()->api_token : 'Bearer ' }}";
-        Laravel.userId = "{{Auth::user()->id}}"
+        Laravel.apiToken = "{{ Auth::check() ? 'Bearer '.Auth::user()->api_token : 'Bearer ' }}"
+        Laravel.userId = "{{Auth::id()}}"
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/chat.js') }}"></script>
