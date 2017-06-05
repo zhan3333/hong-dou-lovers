@@ -16,6 +16,16 @@ use Illuminate\Http\Request;
 class Chat extends Controller
 {
     /**
+     * 发送消息
+     *
+     * <pre>
+     * [
+     *  'content' => '',    // 消息内容
+     *  'type' => '',       // 消息类型
+     *  ‘to’ => '',         // 接收者或房间id
+     * ]
+     * </pre>
+     *
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -24,8 +34,8 @@ class Chat extends Controller
         /** @var User $user */
         $this->validate($request, [
             'content' => 'required|string|max:255',
-            'to' => 'required',
-            'type' => 'required'
+            'to' => 'required|integer|min:1',
+            'type' => 'required|in:1,2'
         ]);
         $content = $request->input('content');
         $to = $request->input('to');
@@ -40,7 +50,11 @@ class Chat extends Controller
             'user_id' => $userId,
         ]);
         $message->save();
-        broadcast(new SendMessage($user, $message));
+        if ($type == 1) {
+            broadcast(new SendMessage($user, $message));
+        } elseif ($type == 2) {
+            // todo 群聊天
+        }
         return response()->caps([], 0, 'sucess', []);
     }
 }
