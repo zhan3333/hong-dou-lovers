@@ -81,6 +81,5 @@
         Laravel.userId = "{{Auth::id()}}"
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/chat.js') }}"></script>
 </body>
 </html>
