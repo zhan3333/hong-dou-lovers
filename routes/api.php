@@ -20,3 +20,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/chat', 'Chat@sendMessage');
 });
+
+/** @var Dingo\Api\Routing\Router $api */
+$api = app('Dingo\Api\Routing\Router');
+$api->version('v1', ['namespace' => 'App\Api\V1\Controllers'],function ($api) {
+    /** @var Dingo\Api\Routing\Router $api */
+    $api->group(['middleware' => 'api.auth'], function ($api) {
+        /** @var Dingo\Api\Routing\Router $api */
+        $api->get('/test', 'UserController@show');
+        $api->any('/user', function () {
+            $user = app('Dingo\Api\Auth\Auth')->user();
+            return $user;
+        });
+    });
+    $api->group([], function ($api) {
+        /** @var Dingo\Api\Routing\Router $api */
+        $api->any('/auth', 'AuthenticateController@authenticate');  // 登陆获取token
+    });
+});
