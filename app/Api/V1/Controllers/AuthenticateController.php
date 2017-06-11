@@ -7,7 +7,9 @@
 namespace App\Api\V1\Controllers;
 
 
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -34,15 +36,32 @@ class AuthenticateController extends BaseController
         }
 
         // all good so return the token
-        return response()->json(compact('token'));
+        return $this->formatReturn(compact('token'));
     }
 
     /**
      * 用户注册
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function register()
+    public function register(Request $request)
     {
-
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+        $data = $request->all();
+        if (User::whereEmail($data['email'])->exists()) {
+            return $this->formatReturn([], 100, '邮箱已被使用');
+        }
+        User::insert([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'api_token' => str_random(60),
+        ]);
+        return $this->formatReturn([], '0', '注册成功');
     }
 
     /****
@@ -63,6 +82,6 @@ class AuthenticateController extends BaseController
             return response()->json(['token_absent'], $e->getStatusCode());
         }
         // the token is valid and we have found the user via the sub claim
-        return response()->json(compact('user'));
+        return $this->formatReturn(compact('user'));
     }
 }
