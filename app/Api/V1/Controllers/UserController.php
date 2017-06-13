@@ -2,8 +2,8 @@
 
 namespace App\Api\V1\Controllers;
 use App\User;
-use Dingo\Api\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Request;
 
 /**
  * @author zhan <grianchan@gmail.com>
@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\Log;
  */
 class UserController extends BaseController
 {
-    public function show(Request $request)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getFriendList(Request $request)
     {
-        $user = User::find(1);
-        Log::info('user', [$request->headers]);
-        return $user;
+        $users = User::all();
+        return $this->formatReturn($users);
     }
 }

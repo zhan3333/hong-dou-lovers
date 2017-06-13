@@ -180,6 +180,7 @@ return [
 //        Barryvdh\Debugbar\ServiceProvider::class,         // 前端debugbar
         Dingo\Api\Provider\LaravelServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
     ],
 
     /*
