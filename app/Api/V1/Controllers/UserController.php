@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Api\V1\Controllers;
+
+use App\Api\V1\BaseController;
 use App\User;
-use Illuminate\Support\Facades\Log;
 use Request;
 
 /**

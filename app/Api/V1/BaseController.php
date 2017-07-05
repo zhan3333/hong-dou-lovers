@@ -4,7 +4,7 @@
  * 2017/6/10 17:31
  */
 
-namespace App\Api\V1\Controllers;
+namespace App\Api\V1;
 
 
 use Dingo\Api\Routing\Helpers;

@@ -5,6 +5,7 @@
  */
 
 namespace App\Api\V1\Controllers;
+use App\Api\V1\BaseController;
 use App\Events\SendMessage;
 use App\Models\Message;
 use Illuminate\Http\Request;

@@ -7,9 +7,9 @@
 namespace App\Api\V1\Controllers;
 
 
+use App\Api\V1\BaseController;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -24,19 +24,22 @@ class AuthenticateController extends BaseController
     {
         // grab credentials from the request
         $credentials = $request->only('email', 'password');
-
+        $uid = \DB::table('users')
+            ->where('email', $credentials['email'])
+            ->value('id');
+        if (empty($uid)) return $this->formatReturn([], -1, '用户不存在');
         try {
             // attempt to verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return response()->formatReturn([], -1, '账号或密码错误');
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return response()->formatReturn([], -1, '服务器错误');
         }
 
         // all good so return the token
-        return $this->formatReturn(compact('token'));
+        return $this->formatReturn(['token' => $token, 'uid' => $uid]);
     }
 
     /**
