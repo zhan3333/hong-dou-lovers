@@ -31,11 +31,11 @@ class AuthenticateController extends BaseController
         try {
             // attempt to verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->formatReturn([], -1, '账号或密码错误');
+                return $this->formatReturn([], -1, '账号或密码错误');
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->formatReturn([], -1, '服务器错误');
+            return $this->formatReturn([], -1, '服务器错误');
         }
 
         // all good so return the token
