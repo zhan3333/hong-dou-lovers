@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,14 +10,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('/chat', 'Chat@sendMessage');
-});
 
 /** @var Dingo\Api\Routing\Router $api */
 $api = app('Dingo\Api\Routing\Router');
@@ -37,15 +27,16 @@ $api->version('v1', ['namespace' => 'App\Api\V1\Controllers'],function ($api) {
         });
         $api->group(['prefix' => 'chat'], function ($api) {
             /** @var Dingo\Api\Routing\Router $api */
-            $api->post('/sendMessage', 'ChatController@sendMessage');   // 获取好友列表
+            $api->post('/sendMessage', 'ChatController@sendMessage');   // 发送消息
+            $api->post('/getHistoryMessageList', 'ChatController@getHistoryMessageList');   // 获取历史消息
         });
     });
     /* 不需要登陆权限的 */
     $api->group(['prefix' => 'auth'], function ($api) {
         /** @var Dingo\Api\Routing\Router $api */
-        $api->any('/login', 'AuthenticateController@authenticate');  // 登陆获取token
+        $api->post('/login', 'AuthenticateController@authenticate');  // 登陆获取token
         $api->post('/register', 'AuthenticateController@register');  // 注册
-        $api->any('/user', 'AuthenticateController@authenticatedUser');  // 注册
+        $api->post('/user', 'AuthenticateController@authenticatedUser');  // 注册
+        $api->post('/isLogin', 'AuthenticateController@isLogin');   // 判断是否登陆
     });
-
 });

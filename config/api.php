@@ -142,6 +142,7 @@ return [
         'errors' => ':errors',
         'code' => ':code',
         'status_code' => ':status_code',
+        'error_code' => -1,
         'debug' => ':debug',
     ],
 

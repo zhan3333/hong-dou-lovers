@@ -4,7 +4,7 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\BaseController;
 use App\User;
-use Request;
+use Illuminate\Http\Request;
 
 /**
  * @author zhan <grianchan@gmail.com>
@@ -18,7 +18,8 @@ class UserController extends BaseController
      */
     public function getFriendList(Request $request)
     {
-        $users = User::all();
+        $uid = $request->user()->id;
+        $users = \DB::table('users')->whereNotIn('id', [$uid])->get(['id', 'name']);
         return $this->formatReturn($users);
     }
 }

@@ -43,4 +43,44 @@ class ChatController extends BaseController
         }
         return $this->formatReturn();
     }
+
+    /**
+     * 获取历史消息
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getHistoryMessageList(Request $request)
+    {
+        $this->validate($request, [
+            'page' => 'integer|min:1',
+            'length' => 'integer|min:1',
+            'userId' => 'required|integer|min:1',
+            'curMessageId' => 'integer|min:1'
+        ]);
+        $userId = $request->input('userId');
+        $page = $request->input('page', 1);
+        $length = $request->input('length', 20);
+        $curMessageId = $request->input('curMessageId');
+        $uid = $request->user()->id;
+        $query = \DB::table('messages')
+            ->where('user_id', $uid)
+            ->orWhere('user_id', $userId)
+            ->orWhere('to', $userId)
+            ->orWhere('to', $uid);
+        $total = $query->count();
+        if ($curMessageId) {
+            $query->where('id', '<', $curMessageId);
+        }
+        $messages = $query
+            ->orderByDesc('id')
+            ->forPage($page, $length)
+            ->get();
+        return $this->formatReturn([
+            'messages' => $messages,
+            'total' => $total,
+            'page' => $page,
+            'length' => $length
+        ]);
+
+    }
 }

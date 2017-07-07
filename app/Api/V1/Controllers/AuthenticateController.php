@@ -87,4 +87,13 @@ class AuthenticateController extends BaseController
         // the token is valid and we have found the user via the sub claim
         return $this->formatReturn(compact('user'));
     }
+
+    /**
+     * 判断用户是否登陆
+     */
+    public function isLogin(Request $request)
+    {
+        $isLogin = !empty($request->user());
+        return response()->formatReturn(['isLogin' => $isLogin]);
+    }
 }
