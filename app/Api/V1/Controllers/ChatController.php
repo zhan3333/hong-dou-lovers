@@ -62,7 +62,7 @@ class ChatController extends BaseController
         $length = $request->input('length', 20);
         $curMessageId = $request->input('curMessageId');
         $uid = $request->user()->id;
-        $query = \DB::table('messages')
+        $query = \DB::table('messages as m')
             ->where('user_id', $uid)
             ->orWhere('user_id', $userId)
             ->orWhere('to', $userId)
@@ -72,9 +72,10 @@ class ChatController extends BaseController
             $query->where('id', '<', $curMessageId);
         }
         $messages = $query
-            ->orderByDesc('id')
+            ->leftJoin('users as u', 'u.id', '=', 'm.user_id')
+            ->orderBy('id', 'asc')
             ->forPage($page, $length)
-            ->get();
+            ->get(['m.id', 'm.user_id', 'm.to', 'm.type', 'm.content', 'm.created_at', 'm.updated_at', 'u.name']);
         return $this->formatReturn([
             'messages' => $messages,
             'total' => $total,
