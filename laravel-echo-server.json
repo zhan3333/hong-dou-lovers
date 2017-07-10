@@ -1,6 +1,6 @@
 {
 	"authHost": "http://127.0.0.1:1025",
-	"authEndpoint": "/broadcasting/auth",
+	"authEndpoint": "/api/broadcast/auth",
 	"clients": [
 		{
 			"appId": "6c5c49880ade618f",

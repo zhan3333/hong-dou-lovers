@@ -30,6 +30,10 @@ $api->version('v1', ['namespace' => 'App\Api\V1\Controllers'],function ($api) {
             $api->post('/sendMessage', 'ChatController@sendMessage');   // 发送消息
             $api->post('/getHistoryMessageList', 'ChatController@getHistoryMessageList');   // 获取历史消息
         });
+        $api->group(['prefix' => 'broadcast'], function ($api) {
+            /** @var Dingo\Api\Routing\Router $api */
+            $api->post('auth', 'BroadcastController@listenAuth');
+        });
     });
     /* 不需要登陆权限的 */
     $api->group(['prefix' => 'auth'], function ($api) {

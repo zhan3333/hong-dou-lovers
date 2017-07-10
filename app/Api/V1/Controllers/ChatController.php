@@ -36,6 +36,7 @@ class ChatController extends BaseController
             'user_id' => $userId,
         ]);
         $message->save();
+        $message->name = $user->name;
         if ($type == 1) {
             broadcast(new SendMessage($user, $message));
         } elseif ($type == 2) {
