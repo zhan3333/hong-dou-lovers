@@ -36,13 +36,12 @@ class ChatController extends BaseController
             'user_id' => $userId,
         ]);
         $message->save();
-        $message->name = $user->name;
         if ($type == 1) {
             broadcast(new SendMessage($user, $message));
         } elseif ($type == 2) {
             // todo 群聊天
         }
-        return $this->formatReturn();
+        return $this->formatReturn(['message' => $message, 'user' => $user]);
     }
 
     /**
@@ -74,7 +73,7 @@ class ChatController extends BaseController
         }
         $messages = $query
             ->leftJoin('users as u', 'u.id', '=', 'm.user_id')
-            ->orderBy('id', 'asc')
+            ->orderBy('id', 'desc')
             ->forPage($page, $length)
             ->get(['m.id', 'm.user_id', 'm.to', 'm.type', 'm.content', 'm.created_at', 'm.updated_at', 'u.name']);
         return $this->formatReturn([
