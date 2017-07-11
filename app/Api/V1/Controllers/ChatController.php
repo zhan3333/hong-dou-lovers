@@ -63,10 +63,14 @@ class ChatController extends BaseController
         $curMessageId = $request->input('curMessageId');
         $uid = $request->user()->id;
         $query = \DB::table('messages as m')
-            ->where('user_id', $uid)
-            ->orWhere('user_id', $userId)
-            ->orWhere('to', $userId)
-            ->orWhere('to', $uid);
+            ->where(function ($query) use ($uid, $userId){
+                $query->where('user_id', $uid)
+                    ->where('to', $userId);
+            })
+            ->orWhere(function ($query) use ($uid, $userId){
+                $query->where('user_id', $userId)
+                    ->where('to', $uid);
+            });
         $total = $query->count();
         if ($curMessageId) {
             $query->where('id', '<', $curMessageId);

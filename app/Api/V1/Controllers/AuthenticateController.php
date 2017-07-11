@@ -45,19 +45,16 @@ class AuthenticateController extends BaseController
     /**
      * 用户注册
      * @param Request $request
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required|string',
+            'name' => 'required|string|unique:users,name|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|max:255',
         ]);
         $data = $request->all();
-        if (User::whereEmail($data['email'])->exists()) {
-            return $this->formatReturn([], 100, '邮箱已被使用');
-        }
         User::insert([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -94,6 +91,6 @@ class AuthenticateController extends BaseController
     public function isLogin(Request $request)
     {
         $isLogin = !empty($request->user());
-        return response()->formatReturn(['isLogin' => $isLogin]);
+        return $this->formatReturn(['isLogin' => $isLogin]);
     }
 }

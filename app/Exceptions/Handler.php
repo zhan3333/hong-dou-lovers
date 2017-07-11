@@ -46,6 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        Log::debug('exception', [gettype($exception)]);
         if ($exception instanceof ValidationException) {
             return response()->caps([], '100', '参数错误', $exception->validator->errors()->all());
         }

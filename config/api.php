@@ -140,9 +140,10 @@ return [
     'errorFormat' => [
         'message' => ':message',
         'errors' => ':errors',
+        'error_result' => ':error_result',
         'code' => ':code',
         'status_code' => ':status_code',
-        'error_code' => -1,
+        'error_code' => 100,
         'debug' => ':debug',
     ],
 
