@@ -22,4 +22,17 @@ class UserController extends BaseController
         $users = \DB::table('users')->whereNotIn('id', [$uid])->get(['id', 'name']);
         return $this->formatReturn($users);
     }
+
+    /**
+     * 获取用户信息
+     */
+    public function getUserInfo(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|integer'
+        ]);
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
+        return $this->formatReturn(['user' => $user]);
+    }
 }
