@@ -55,30 +55,26 @@ class ChatController extends BaseController
             'page' => 'integer|min:1',
             'length' => 'integer|min:1',
             'userId' => 'required|integer|min:1',
-            'curMessageId' => 'integer|min:1'
         ]);
         $userId = $request->input('userId');
-        $page = $request->input('page', 1);
-        $length = $request->input('length', 20);
-        $curMessageId = $request->input('curMessageId');
+        $page = $request->input('page');
+        $length = $request->input('length');
         $uid = $request->user()->id;
         $query = \DB::table('messages as m')
             ->where(function ($query) use ($uid, $userId){
-                $query->where('user_id', $uid)
-                    ->where('to', $userId);
+                $query->where('m.user_id', $uid)
+                    ->orWhere('m.to', $userId);
             })
             ->orWhere(function ($query) use ($uid, $userId){
-                $query->where('user_id', $userId)
-                    ->where('to', $uid);
+                $query->where('m.user_id', $userId)
+                    ->orWhere('m.to', $uid);
             });
         $total = $query->count();
-        if ($curMessageId) {
-            $query->where('id', '<', $curMessageId);
-        }
+        if ($page) $query->take($length);
+        if ($length) $query->skip(($page - 1) * $length);
         $messages = $query
             ->leftJoin('users as u', 'u.id', '=', 'm.user_id')
-            ->orderBy('id', 'desc')
-            ->forPage($page, $length)
+            ->orderBy('m.id', 'desc')
             ->get(['m.id', 'm.user_id', 'm.to', 'm.type', 'm.content', 'm.created_at', 'm.updated_at', 'u.name']);
         return $this->formatReturn([
             'messages' => $messages,
