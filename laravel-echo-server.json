@@ -1,5 +1,5 @@
 {
-	"authHost": "http://127.0.0.1:1025",
+	"authHost": "http://api.hd.grianchan.com",
 	"authEndpoint": "/api/broadcast/auth",
 	"clients": [
 		{
