@@ -63,11 +63,11 @@ class ChatController extends BaseController
         $query = \DB::table('messages as m')
             ->where(function ($query) use ($uid, $userId){
                 $query->where('m.user_id', $uid)
-                    ->orWhere('m.to', $userId);
+                    ->where('m.to', $userId);
             })
             ->orWhere(function ($query) use ($uid, $userId){
                 $query->where('m.user_id', $userId)
-                    ->orWhere('m.to', $uid);
+                    ->where('m.to', $uid);
             });
         $total = $query->count();
         if ($page) $query->take($length);
