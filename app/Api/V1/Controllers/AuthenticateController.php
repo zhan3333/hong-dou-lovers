@@ -22,12 +22,18 @@ class AuthenticateController extends BaseController
      */
     public function authenticate(Request $request)
     {
-        // grab credentials from the request
-        $credentials = $request->only('email', 'password');
-        $uid = \DB::table('users')
-            ->where('email', $credentials['email'])
-            ->value('id');
+        $this->validate($request, [
+            'identifier' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        $user = \DB::table('users')
+            ->where('email', $request->input('identifier'))
+            ->orWhere('name', $request->input('identifier'))
+            ->first(['id', 'email']);
+        $uid = empty($user->id)?0:$user->id;
         if (empty($uid)) return $this->formatReturn([], -1, '用户不存在');
+        $credentials = ['email' => $user->email, 'password' => $request->input('password')];
         try {
             // attempt to verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
