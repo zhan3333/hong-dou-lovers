@@ -44,6 +44,7 @@ $api->version('v1', ['namespace' => 'App\Api\V1\Controllers'],function ($api) {
     $api->group(['prefix' => 'user'], function ($api) {
         $api->group(['middleware' => 'api.auth'], function ($api) {
             $api->post('/getFriendList', 'UserController@getFriendList');   // 获取好友列表
+            $api->post('setHeadimg', 'UserController@setHeadimg');         // 设置头像
         });
         $api->post('getUserInfo', 'UserController@getUserInfo');
     });
