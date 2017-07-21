@@ -33,9 +33,6 @@ class UserController extends BaseController
         ]);
         $user_id = $request->input('user_id');
         $user = User::find($user_id);
-        if ($user->headimg_url) {
-            $user->headimg_full_url =  config('app.url') . \Storage::url($user->headimg_url);
-        }
         return $this->formatReturn(['user' => $user]);
     }
 
@@ -52,8 +49,7 @@ class UserController extends BaseController
             $url = $headimg->store('public/avatars');
             $user->headimg_url = $url;
             $user->save();
-            \Log::info('file', [$request->all(), $url]);
-            return $this->formatReturn(['path' =>  config('app.url') . \Storage::url($url)]);
+            return $this->formatReturn(['path' =>  $user->headimg_url]);
         }
         return $this->formatReturn([], '100', '上传文件失败');
     }

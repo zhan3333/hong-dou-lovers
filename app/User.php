@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'api_token'
+        'name', 'email', 'password', 'api_token', 'headimg_url'
     ];
 
     /**
@@ -27,4 +27,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token', 'api_token'
     ];
+
+    /**
+     * 处理用户头像url
+     * @param $value
+     * @return string
+     */
+    public function getHeadimgUrlAttribute($value)
+    {
+        return config('app.url') . \Storage::url($value);
+    }
 }
