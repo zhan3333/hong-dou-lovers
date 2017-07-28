@@ -19,7 +19,7 @@ class UserController extends BaseController
     public function getFriendList(Request $request)
     {
         $uid = $request->user()->id;
-        $users = \DB::table('users')->whereNotIn('id', [$uid])->get(['id', 'name']);
+        $users = User::whereNotIn('id', [$uid])->get();
         return $this->formatReturn($users);
     }
 

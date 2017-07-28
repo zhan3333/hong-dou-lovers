@@ -35,6 +35,13 @@ class User extends Authenticatable
      */
     public function getHeadimgUrlAttribute($value)
     {
-        return config('app.url') . \Storage::url($value);
+        if ($value) {
+            return config('app.url') . \Storage::url($value);
+        } else {
+            $headimgs = \Storage::disk('images')->files('headimg');
+            $headimg = array_random($headimgs, 1)[0];
+            $path = \Storage::disk('images')->url($headimg);
+            return $path;
+        }
     }
 }
